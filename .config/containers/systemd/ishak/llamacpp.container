@@ -1,0 +1,33 @@
+[Unit]
+PartOf=models.target
+
+[Container]
+Pod=ishak.pod
+Environment=LLAMA_CACHE=/cache
+Image=ghcr.io/ggml-org/llama.cpp:server-vulkan
+AddDevice=/dev/dri
+Volume=%h/.var/app/io.github.gmanka-containers.ishak/cache:/cache:z
+Exec=-hf morikomorizz/Qwen3.6-35B-A3B-Uncensored-HauhauCS-MTP \
+     -hff Qwen3.6-35B-A3B-Uncensored-HauhauCS-MTP-Q4_K_P.gguf \
+     --no-mmproj \
+     --spec-type draft-mtp \
+     --spec-draft-n-max 2 \
+     --fit on \
+     --fit-target 1536 \
+     -fa on \
+     -c 131072 \
+     -ctk q8_0 \
+     -ctv q8_0 \
+     -np 1 \
+     --jinja \
+     -t 12 \
+     -tb 12 \
+     -b 2048 \
+     -ub 512 \
+     --cache-ram 0 \
+     --port 8080 \
+     --ui-mcp-proxy
+
+[Service]
+ExecStartPre=mkdir -p %h/.var/app/io.github.gmanka-containers.ishak/cache
+Restart=on-failure

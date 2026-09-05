@@ -1,0 +1,11 @@
+[Unit]
+Upholds=llamacpp.service
+Upholds=mcp-searxng.service
+Upholds=searxng.service
+
+[Pod]
+Network=pasta
+PublishPort=127.0.0.1:8080:8080
+
+[Install]
+WantedBy=default.target

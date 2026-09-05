@@ -1,0 +1,11 @@
+[Unit]
+PartOf=models.target
+
+[Container]
+Pod=ishak.pod
+Environment=SEARXNG_PORT=8081
+Image=docker.io/searxng/searxng:latest
+Volume=%h/.var/app/io.github.gmankab.ishak/config/searxng.yml:/etc/searxng/settings.yml:ro,z
+
+[Service]
+Restart=on-failure
