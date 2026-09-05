@@ -1,0 +1,53 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    repo: '{{ playbook_dir | dirname | dirname }}'
+    ansible_pipelining: true
+  handlers:
+    - name: reload sshd after password auth disabled
+      listen: sshd
+      command: systemctl reload sshd
+      failed_when: false
+  tasks:
+    - name: disable ssh password auth because you don't want ishak to ssh to your system
+      copy:
+        dest: /etc/ssh/sshd_config.d/00-no-password.conf
+        content: PasswordAuthentication no
+      notify: sshd
+    - name: deny pam because you don't want ishak to use su to run commands as your user
+      community.general.pamd:
+        name: su
+        type: auth
+        control: sufficient
+        module_path: pam_rootok.so
+        new_type: auth
+        new_control: requisite
+        new_module_path: pam_succeed_if.so
+        module_arguments: [quiet, ruser, '!=', ishak]
+    - name: deny polkit because you don't want ishak to use machinectl or systemd-run to run commands as your user
+      copy:
+        dest: /etc/polkit-1/rules.d/00-ishak.rules
+        content: 'polkit.addRule(function(a,s){if(s.user=="ishak")return polkit.Result.NO;});'
+    - name: create ishak user without sudo access
+      user:
+        name: ishak
+    - name: enable linger because systemd services not work without this
+      command: loginctl enable-linger ishak
+      args:
+        creates: /var/lib/systemd/linger/ishak
+    - name: copy containers to ishak homedir
+      become_user: ishak
+      copy:
+        src: '{{ repo }}/{{ item }}/'
+        dest: '/home/ishak/{{ item }}/'
+      loop:
+        - .var
+        - .config
+    - name: start systemd services
+      become_user: ishak
+      systemd_service:
+        scope: user
+        daemon_reload: true
+        name: ishak-pod.service
+        state: restarted
