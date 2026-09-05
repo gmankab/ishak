@@ -7,25 +7,21 @@ Environment=LLAMA_CACHE=/cache
 Image=ghcr.io/ggml-org/llama.cpp:server-vulkan
 AddDevice=/dev/dri
 Volume=%h/.var/app/io.github.gmanka-containers.ishak/cache:/cache:z
-Exec=-hf morikomorizz/Qwen3.6-35B-A3B-Uncensored-HauhauCS-MTP \
-     -hff Qwen3.6-35B-A3B-Uncensored-HauhauCS-MTP-Q4_K_P.gguf \
+Exec=-hf HauhauCS/Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF \
+     -hff Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-Q8_K_P.gguf \
      --no-mmproj \
      --spec-type draft-mtp \
      --spec-draft-n-max 2 \
-     --fit on \
-     --fit-target 1536 \
+     --fit-target 768 \
+     --load-mode none \
      -fa on \
-     -c 131072 \
+     -c 262144 \
      -ctk q8_0 \
      -ctv q8_0 \
      -np 1 \
-     --jinja \
+     --reasoning on \
      -t 12 \
-     -tb 12 \
-     -b 2048 \
-     -ub 512 \
-     --cache-ram 0 \
-     --port 8080 \
+     --cache-ram -1 \
      --ui-mcp-proxy
 
 [Service]
