@@ -1,0 +1,17 @@
+config_version: 1
+control_plane:
+  base_url: https://api.openai.com
+
+  tunnel_id: tunnel_6a9d5fafe0548191b8869a59db411283
+  api_key: env:CONTROL_PLANE_API_KEY
+health:
+  listen_addr: 127.0.0.1:0
+admin_ui:
+  open_browser: false
+log:
+  level: info
+  format: json
+mcp:
+  commands:
+    - channel: main
+      command: ishak-bridge.py

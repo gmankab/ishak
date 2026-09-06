@@ -1,0 +1,14 @@
+[Unit]
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.var/app/io.github.gmankab.ishak/config/codex-mcp/apikey.env
+Environment=CODEX_HOME=%h/.var/app/io.github.gmankab.ishak/config/codex-mcp
+ExecStart=tunnel-client run --profile codex-local --health.listen-addr 127.0.0.1:0
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
