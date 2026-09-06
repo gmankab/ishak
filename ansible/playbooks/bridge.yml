@@ -1,0 +1,17 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    repo: '{{ playbook_dir | dirname | dirname }}'
+  tasks:
+    - copy:
+        src: '{{ item.src }}'
+        dest: '{{ item.dest }}'
+        mode: preserve
+      loop:
+        - src: '{{ repo }}/bridge/scripts/'
+          dest: /usr/local/bin/
+        - src: '{{ repo }}/bridge/systemd/'
+          dest: /home/ishak/.config/systemd/user/
+        - src: '{{ repo }}/bridge/config/'
+          dest: /home/ishak/.config/tunnel-client/
