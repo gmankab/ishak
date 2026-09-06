@@ -13,11 +13,13 @@
     - name: copy containers to ishak homedir
       become_user: ishak
       copy:
-        src: '{{ repo }}/{{ item }}/'
-        dest: '/home/ishak/{{ item }}/'
+        src: '{{ item.src }}'
+        dest: '{{ item.dst }}'
       loop:
-        - .var
-        - .config
+        - src: '{{ repo }}/llama/quadlet/'
+          dst: /home/ishak/.config/containers/systemd/llama/
+        - src: '{{ repo }}/llama/config/searxng.yml'
+          dst: /home/ishak/.var/app/io.github.gmankab.ishak/config/searxng.yml
     - name: start systemd services
       become_user: ishak
       systemd_service:
