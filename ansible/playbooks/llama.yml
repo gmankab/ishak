@@ -18,8 +18,8 @@
       loop:
         - src: '{{ repo }}/llama/quadlet/'
           dst: /home/ishak/.config/containers/systemd/llama/
-        - src: '{{ repo }}/llama/config/searxng.yml'
-          dst: /home/ishak/.var/app/io.github.gmankab.ishak/config/searxng.yml
+        - src: '{{ repo }}/llama/config/'
+          dst: /home/ishak/.var/app/io.github.gmankab.ishak/config/
     - name: start systemd services
       become_user: ishak
       systemd_service:
