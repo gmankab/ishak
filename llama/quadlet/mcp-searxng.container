@@ -2,7 +2,7 @@
 PartOf=models.target
 
 [Container]
-Pod=ishak.pod
+Pod=llama.pod
 Environment=SEARXNG_URL=http://127.0.0.1:8081
 Environment=MCP_HTTP_PORT=3000
 Environment=MCP_HTTP_HOST=0.0.0.0

@@ -2,7 +2,7 @@
 PartOf=models.target
 
 [Container]
-Pod=ishak.pod
+Pod=llama.pod
 Environment=LLAMA_CACHE=/cache
 Image=ghcr.io/ggml-org/llama.cpp:server-vulkan
 AddDevice=/dev/dri

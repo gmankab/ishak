@@ -23,5 +23,5 @@
       systemd_service:
         scope: user
         daemon_reload: true
-        name: ishak-pod.service
+        name: llama-pod.service
         state: restarted
