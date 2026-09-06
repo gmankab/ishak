@@ -1,0 +1,27 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    repo: '{{ playbook_dir | dirname | dirname }}'
+    ansible_pipelining: true
+  handlers:
+    - name: reload sshd after password auth disabled
+      listen: sshd
+      command: systemctl reload sshd
+      failed_when: false
+  tasks:
+    - name: copy containers to ishak homedir
+      become_user: ishak
+      copy:
+        src: '{{ repo }}/{{ item }}/'
+        dest: '/home/ishak/{{ item }}/'
+      loop:
+        - .var
+        - .config
+    - name: start systemd services
+      become_user: ishak
+      systemd_service:
+        scope: user
+        daemon_reload: true
+        name: ishak-pod.service
+        state: restarted
